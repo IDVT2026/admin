@@ -51,43 +51,5 @@
   <button id="externalFullscreenBtn" class="external-fullscreen" title="Full screen">⤢</button>
   <!-- Temporary overlay for first click -->
   <div id="firstClickOverlay" class="click-capture-overlay"></div>
-
-  <script>
-    const baseUrl = 'https://script.google.com/macros/s/AKfycbyGOoaOwPd7ZSmQM4xt_c2QbyFu73wydTm3uk3pN1ACBMZ4KZ1LYiCyjX6CwkKsR7xm/exec?mode=admin';
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-    const iframe = document.getElementById('launcherIframe');
-    iframe.src = isMobile ? baseUrl + '?mode=mobile' : baseUrl;
-
-    const btn = document.getElementById('externalFullscreenBtn');
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(console.warn);
-      } else {
-        document.exitFullscreen();
-      }
-    }
-    btn.addEventListener('click', toggleFullscreen);
-
-    document.addEventListener('fullscreenchange', () => {
-      btn.textContent = document.fullscreenElement ? '✕' : '⤢';
-      btn.title = document.fullscreenElement ? 'Exit full screen' : 'Full screen';
-    });
-
-    // --- First click anywhere (captured by overlay) ---
-    const overlay = document.getElementById('firstClickOverlay');
-    overlay.addEventListener('click', function onFirstClick() {
-      // Remove overlay immediately
-      overlay.removeEventListener('click', onFirstClick);
-      overlay.remove();
-      // Enter full‑screen
-      document.documentElement.requestFullscreen().catch(console.warn);
-    });
-    // Also for touch devices
-    overlay.addEventListener('touchstart', function onFirstTouch() {
-      overlay.removeEventListener('touchstart', onFirstTouch);
-      overlay.remove();
-      document.documentElement.requestFullscreen().catch(console.warn);
-    });
-  </script>
 </body>
 </html>
