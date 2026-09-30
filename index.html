@@ -154,7 +154,7 @@
   <div id="frame-wrapper">
     <iframe
       id="app-frame"
-      src="https://script.google.com/macros/s/AKfycbzw06GVuMg2mTvhyO-E-BHIlKCZ_W84kGVPxKMn2BpNtVJK23Jdv-i6_NTLARNcP3md/exec"
+      src="https://script.google.com/macros/s/AKfycbwwG27kgoboqBOVZQAkvHrQ-eccGzuQ18SOgS_R9K1vyyiOXnQtCHl3foJvqm50ZnnC/exec"
       scrolling="no"
       frameborder="0"
       allow="accelerometer; autoplay; camera; clipboard-read; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; microphone; midi; payment"
@@ -213,6 +213,17 @@
   timeout = setTimeout(function() {
     setStatus('Taking longer than expected — please wait...');
   }, 15000);
+
+  // Backstop. If the ready signal is ever missed (a Google wrapper change, a blocked message,
+  // a render path that does not call signalFirstPaint_) the splash would otherwise cover a
+  // perfectly working app forever. The iframe is already visible underneath, so revealing it
+  // late is always better than never.
+  setTimeout(function() {
+    if (!ready) {
+      console.warn('Ready signal not received; revealing app as a fallback.');
+      hideSplash();
+    }
+  }, 20000);
 })();
 </script>
 </body>
